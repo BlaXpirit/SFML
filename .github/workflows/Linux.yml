@@ -2,10 +2,10 @@ name: Linux
 
 on: [push, pull_request]
 
-# strategy:
-#     matrix:
-#         compiler: [gcc, clang]
-#         cmake_flags: [-DBUILD_SHARED_LIBS=FALSE, -DBUILD_SHARED_LIBS=TRUE]
+strategy:
+    matrix:
+        compiler: [gcc, clang]
+        cmake_flags: [-DBUILD_SHARED_LIBS=FALSE, -DBUILD_SHARED_LIBS=TRUE]
 
 
 jobs:
