@@ -12,14 +12,14 @@ jobs:
         runs-on: ubuntu-latest
             
         steps:
-            - uses: actions/checkout@v2
-            - name: build
-                run: mkdir build && cd build
-                run: cmake .. ${{matrix.cmake_flags}} 
-                    -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
-                    -DCMAKE_INSTALL_PREFIX=../install 
-                    -DSFML_BUILD_EXAMPLES=TRUE 
-                    -DCMAKE_VERBOSE_MAKEFILE=ON
-                    -DSFML_BUILD_TEST_SUITE=TRUE
-                run: cmake --build . --target install
+        - uses: actions/checkout@v2
+        - name: build
+            run: mkdir build && cd build
+            run: cmake .. ${{matrix.cmake_flags}} 
+                -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
+                -DCMAKE_INSTALL_PREFIX=../install 
+                -DSFML_BUILD_EXAMPLES=TRUE 
+                -DCMAKE_VERBOSE_MAKEFILE=ON
+                -DSFML_BUILD_TEST_SUITE=TRUE
+            run: cmake --build . --target install
 
