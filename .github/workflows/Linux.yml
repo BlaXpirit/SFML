@@ -9,19 +9,19 @@ strategy:
 
 jobs:
     build:
+        - uses: actions/checkout@v2
         runs-on: ubuntu-latest
             
         steps:
-        - uses: actions/checkout@v2
         - name: prep
             run: mkdir build && cd build
 
-        # - name: config
-        #     run: cmake .. ${{matrix.cmake_flags}} 
-        #         -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
-        #         -DCMAKE_INSTALL_PREFIX=../install 
-        #         -DSFML_BUILD_EXAMPLES=TRUE 
-        #         -DCMAKE_VERBOSE_MAKEFILE=ON
-        #         -DSFML_BUILD_TEST_SUITE=TRUE
-        # - name: build
-        #     run: cmake --build . --target install
+        - name: config
+            run: cmake .. ${{matrix.cmake_flags}} |
+                -DCMAKE_CXX_COMPILER=${{matrix.compiler}} |
+                -DCMAKE_INSTALL_PREFIX=../install |
+                -DSFML_BUILD_EXAMPLES=TRUE |
+                -DCMAKE_VERBOSE_MAKEFILE=ON |
+                -DSFML_BUILD_TEST_SUITE=TRUE 
+        - name: build
+            run: cmake --build . --target install
