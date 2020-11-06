@@ -1,3 +1,7 @@
 name: MacOS
 
 on: [push]
+
+jobs:
+    build:
+        - uses: actions/checkout@v2

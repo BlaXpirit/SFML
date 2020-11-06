@@ -1,3 +1,7 @@
 name: Windows
 
 on: [push]
+
+jobs:
+    build:
+        - uses: actions/checkout@v2
