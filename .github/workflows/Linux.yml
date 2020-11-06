@@ -20,7 +20,7 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/build
       run: | 
-        cmake .. ${{matrix.cmake_flags}} 
+        cmake $GITHUB_WORKSPACE ${{matrix.cmake_flags}} 
         -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
         -DCMAKE_INSTALL_PREFIX=../install
         -DSFML_BUILD_EXAMPLES=TRUE
