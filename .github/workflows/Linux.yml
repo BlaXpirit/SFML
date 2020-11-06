@@ -9,7 +9,7 @@ strategy:
 
 jobs:
     build:
-        - uses: actions/checkout@v2
+        uses: actions/checkout@v2
         runs-on: ubuntu-latest
             
         steps:
