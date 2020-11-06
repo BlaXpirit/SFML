@@ -12,6 +12,4 @@ jobs:
         uses: actions/checkout@v2
         runs-on: ubuntu-latest
             
-        steps:
-            - name: build
-                run: "echo hi"
+        run: "echo hi"
