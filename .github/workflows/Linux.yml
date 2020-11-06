@@ -2,13 +2,12 @@ name: Linux
 
 on: [push]
 
-strategy:
-    matrix:
-        compiler: [gcc, clang]
-        cmake_flags: [-DBUILD_SHARED_LIBS=FALSE, -DBUILD_SHARED_LIBS=TRUE]
-
 jobs:
   build:
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+        cmake_flags: [-DBUILD_SHARED_LIBS=FALSE, -DBUILD_SHARED_LIBS=TRUE]
     runs-on: ubuntu-latest
 
     steps:
