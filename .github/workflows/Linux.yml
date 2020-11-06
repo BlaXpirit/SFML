@@ -7,9 +7,11 @@ on: [push, pull_request]
 #         compiler: [gcc, clang]
 #         cmake_flags: [-DBUILD_SHARED_LIBS=FALSE, -DBUILD_SHARED_LIBS=TRUE]
 
+
 jobs:
     build:
-        uses: actions/checkout@v2
         runs-on: ubuntu-latest
-            
-        run: "echo hi"
+  
+        steps:
+            - uses: actions/checkout@v2
+        
