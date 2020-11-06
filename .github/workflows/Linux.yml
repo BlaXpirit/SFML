@@ -14,13 +14,7 @@ jobs:
   
         steps:
             - uses: actions/checkout@v2
-            - name: build
-                
-                run: | 
-                    cmake .. ${{matrix.cmake_flags}} 
-                    -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
-                    -DCMAKE_INSTALL_PREFIX=../install
-                    -DSFML_BUILD_EXAMPLES=TRUE
-                    -DCMAKE_VERBOSE_MAKEFILE=ON
-                    -DSFML_BUILD_TEST_SUITE=TRUE 
-                run: cmake --build . --target install
+            - name: Display the path
+                run: echo $PATH
+                shell: bash
+              
