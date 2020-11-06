@@ -1,0 +1,26 @@
+name: Linux
+
+on: [push, pull_request]
+
+strategy:
+    matrix:
+        compiler: [gcc, clang]
+        cmake_flags: [-DBUILD_SHARED_LIBS=FALSE, -DBUILD_SHARED_LIBS=TRUE]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+            
+        steps:
+            - uses: actions/checkout@v2
+            - name: build
+                shell: bash
+                run: mkdir build && cd build
+                run: cmake .. ${{matrix.cmake_flags}} 
+                    -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
+                    -DCMAKE_INSTALL_PREFIX=../install 
+                    -DSFML_BUILD_EXAMPLES=TRUE 
+                    -DCMAKE_VERBOSE_MAKEFILE=ON
+                    -DSFML_BUILD_TEST_SUITE=TRUE
+                run: cmake --build . --target install
+
