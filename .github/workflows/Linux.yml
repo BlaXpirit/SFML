@@ -18,9 +18,9 @@ jobs:
 
     - name: Get bin contents. 
       run: |
-        cat /bin
+        ls /bin
         echo "----------------------------------------------"
-        cat /usr/bin
+        ls /usr/bin
     # - name: Create Build Environment
     #   run: cmake -E make_directory ${{runner.workspace}}/build
 
