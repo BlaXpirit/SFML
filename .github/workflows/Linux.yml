@@ -19,7 +19,7 @@ jobs:
     - name: Create Build Environment
       run: |
         cmake -E make_directory ${{runner.workspace}}/build
-        cmake -E make_directory ${{runner.workspace}}/build
+        cmake -E make_directory ${{runner.workspace}}/install
 
     - name: Configure CMake
       shell: bash
