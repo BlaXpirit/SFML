@@ -26,7 +26,7 @@ jobs:
         CC: ${{matrix.compiler}}
       run: |
         cmake $GITHUB_WORKSPACE ${{matrix.cmake_flags}}
-        -DCMAKE_INSTALL_PREFIX=../install
+        -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install
         -DSFML_BUILD_EXAMPLES=TRUE
         -DCMAKE_VERBOSE_MAKEFILE=ON
         -DSFML_BUILD_TEST_SUITE=TRUE 
