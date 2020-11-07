@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        compiler: [/usr/bin/g++, /usr/bin/clang]
+        compiler: [gcc, clang]
         cmake_flags: [-DBUILD_SHARED_LIBS=FALSE, -DBUILD_SHARED_LIBS=TRUE]
     runs-on: ubuntu-latest
 
@@ -22,9 +22,10 @@ jobs:
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: | 
-        cmake $GITHUB_WORKSPACE ${{matrix.cmake_flags}} 
-        -DCMAKE_CXX_COMPILER=${{matrix.compiler}}
+      env:
+        CC: ${{matrix.compiler}}
+      run: |
+        cmake $GITHUB_WORKSPACE ${{matrix.cmake_flags}}
         -DCMAKE_INSTALL_PREFIX=../install
         -DSFML_BUILD_EXAMPLES=TRUE
         -DCMAKE_VERBOSE_MAKEFILE=ON
