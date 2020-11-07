@@ -5,5 +5,26 @@ on: [push]
 jobs:
   build:
     runs-on: macos-latest
+
+    strategy:
+      matrix:
+        cmake_flags: [-DBUILD_SHARED_LIBS=FALSE, -DBUILD_SHARED_LIBS=TRUE, -DSFML_BUILD_FRAMEWORKS=TRUE, -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/cmake/toolchains/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR]
+
     steps:
     - uses: actions/checkout@v2
+
+    - name: Create Build Environment
+      run: |
+        cmake -E make_directory ${{runner.workspace}}/build
+
+    - name: Configure CMake
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      env:
+        CC: ${{matrix.compiler}}
+      run: cmake $GITHUB_WORKSPACE ${{matrix.cmake_flags}} -DCMAKE_INSTALL_PREFIX=${{runner.workspace}}/install -DSFML_BUILD_EXAMPLES=TRUE -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_BUILD_TEST_SUITE=TRUE 
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: cmake --build . --target install

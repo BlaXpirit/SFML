@@ -4,11 +4,12 @@ on: [push]
 
 jobs:
   build:
+    runs-on: ubuntu-latest
+    
     strategy:
       matrix:
         compiler: [gcc, clang]
         cmake_flags: [-DBUILD_SHARED_LIBS=FALSE, -DBUILD_SHARED_LIBS=TRUE]
-    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -19,15 +20,13 @@ jobs:
     - name: Create Build Environment
       run: |
         cmake -E make_directory ${{runner.workspace}}/build
-        cmake -E make_directory ${{runner.workspace}}/install
 
     - name: Configure CMake
       shell: bash
       working-directory: ${{runner.workspace}}/build
       env:
         CC: ${{matrix.compiler}}
-      run: |
-        cmake $GITHUB_WORKSPACE ${{matrix.cmake_flags}} -DCMAKE_INSTALL_PREFIX=${{runner.workspace}}/install -DSFML_BUILD_EXAMPLES=TRUE -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_BUILD_TEST_SUITE=TRUE 
+      run: cmake $GITHUB_WORKSPACE ${{matrix.cmake_flags}} -DCMAKE_INSTALL_PREFIX=${{runner.workspace}}/install -DSFML_BUILD_EXAMPLES=TRUE -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_BUILD_TEST_SUITE=TRUE 
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
