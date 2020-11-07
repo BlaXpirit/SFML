@@ -14,13 +14,13 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install Dependencies
-        run: sudo apt-get install libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev
+      run: sudo apt-get install libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev
 
     - name: Get bin contents. 
-        run: |
-          cat /bin
-          echo "----------------------------------------------"
-          cat /usr/bin
+      run: |
+        cat /bin
+        echo "----------------------------------------------"
+        cat /usr/bin
     # - name: Create Build Environment
     #   run: cmake -E make_directory ${{runner.workspace}}/build
 
