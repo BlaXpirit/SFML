@@ -17,21 +17,21 @@ jobs:
       run: sudo apt-get install libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev
 
     - name: Create Build Environment
-      run: mkdir ${{runner.workspace}}/build && mkdir ${{runner.workspace}}/install
+      run: mkdir $GITHUB_WORKSPACE/build && mkdir $GITHUB_WORKSPACE/install
 
     - name: Configure CMake
       shell: bash
-      working-directory: ${{runner.workspace}}/build
+      working-directory: $GITHUB_WORKSPACE/build
       env:
         CC: ${{matrix.compiler}}
       run: |
-        cmake ${{runner.workspace}} ${{matrix.cmake_flags}}
-        -DCMAKE_INSTALL_PREFIX=${{runner.workspace}}/install
+        cmake $GITHUB_WORKSPACE ${{matrix.cmake_flags}}
+        -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install
         -DSFML_BUILD_EXAMPLES=TRUE
         -DCMAKE_VERBOSE_MAKEFILE=ON
         -DSFML_BUILD_TEST_SUITE=TRUE 
 
     - name: Build
-      working-directory: ${{runner.workspace}}/build
+      working-directory: $GITHUB_WORKSPACE/build
       shell: bash
       run: cmake --build . --target install
