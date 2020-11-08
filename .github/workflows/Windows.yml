@@ -10,12 +10,18 @@ jobs:
         config:
         - {
             os: windows-2016,
-            name: "Visual Studio 15 2017 Static",
             cmake_flags: -DBUILD_SHARED_LIBS=FALSE
           }
         - {
             os: windows-2016,
-            name: "Visual Studio 15 2017 Shared",
+            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+          }
+        - {
+            os: windows-latest,
+            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+          }
+        - {
+            os: windows-latest,
             cmake_flags: -DBUILD_SHARED_LIBS=TRUE
           }
 
