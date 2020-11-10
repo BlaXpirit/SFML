@@ -4,24 +4,25 @@ on: [push]
 
 jobs:
   build:
+    name: ${{matrix.config.name}}
     runs-on: ${{matrix.config.os}}
     strategy:
       matrix:
         config:
         - {
-            os: windows-2016,
+            name: VS2017 Static, os: windows-2016,
             cmake_flags: -DBUILD_SHARED_LIBS=FALSE
           }
         - {
-            os: windows-2016,
+            name: VS2017 Shared, os: windows-2016,
             cmake_flags: -DBUILD_SHARED_LIBS=TRUE
           }
         - {
-            os: windows-latest,
+            name: VS2019 Static, os: windows-latest,
             cmake_flags: -DBUILD_SHARED_LIBS=FALSE
           }
         - {
-            os: windows-latest,
+            name: VS2019 Shared, os: windows-latest,
             cmake_flags: -DBUILD_SHARED_LIBS=TRUE
           }
 

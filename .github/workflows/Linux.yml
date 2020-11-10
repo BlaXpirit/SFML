@@ -4,12 +4,28 @@ on: [push, pull_request]
 
 jobs:
   build:
+    name: ${{matrix.config.name}}
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        compiler: [gcc, clang]
-        cmake_flags: [-DBUILD_SHARED_LIBS=FALSE, -DBUILD_SHARED_LIBS=TRUE]
+        config:
+          - {
+              name: Linux GCC Static, compiler: gcc,
+              cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+            }
+          - {
+              name: Linux GCC Shared, compiler: gcc,
+              cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+            }
+          - {
+              name: Linux Clang Static, compiler: clang,
+              cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+            }
+          - {
+              name: Linux Clang Shared, compiler: clang,
+              cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+            }
 
     steps:
     - uses: actions/checkout@v2
@@ -25,8 +41,8 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/build
       env:
-        CC: ${{matrix.compiler}}
-      run: cmake $GITHUB_WORKSPACE ${{matrix.cmake_flags}} -DCMAKE_INSTALL_PREFIX=${{runner.workspace}}/install -DSFML_BUILD_EXAMPLES=TRUE -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_BUILD_TEST_SUITE=TRUE 
+        CC: ${{matrix.config.compiler}}
+      run: cmake $GITHUB_WORKSPACE ${{matrix.config.cmake_flags}} -DCMAKE_INSTALL_PREFIX=${{runner.workspace}}/install -DSFML_BUILD_EXAMPLES=TRUE -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_BUILD_TEST_SUITE=TRUE 
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
