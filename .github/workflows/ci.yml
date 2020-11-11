@@ -1,0 +1,84 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: ${{matrix.config.name}}
+    runs-on: ${{matrix.config.os}}
+
+    strategy:
+      matrix:
+        config:
+        - {
+            name: Windows VS2017 Static, os: windows-2016,
+            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+          }
+        - {
+            name: Windows VS2017 Shared, os: windows-2016,
+            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+          }
+        - {
+            name: Windows VS2019 Static, os: windows-latest,
+            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+          }
+        - {
+            name: Windows VS2019 Shared, os: windows-latest,
+            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+          }
+        - {
+            name: MacOS XCode Shared, os: macos-latest,
+            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+          }
+        - {
+            name: MacOS XCode Static, os: macos-latest,
+            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+          }
+        - {
+            name: MacOS XCode Frameworks, os: macos-latest,
+            cmake_flags: -DSFML_BUILD_FRAMEWORKS=TRUE
+          }
+        - {
+            name: MacOS XCode iOS, os: macos-latest,
+            cmake_flags: -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/cmake/toolchains/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
+          }
+        - {
+            name: GCC Static, compiler: g++,
+            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+          }
+        - {
+            name: GCC Shared, compiler: g++,
+            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+          }
+        - {
+            name: Clang Static, compiler: clang,
+            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+          }
+        - {
+            name: Clang Shared, compiler: clang,
+            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+          }
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment
+      run: |
+        cmake -E make_directory ${{runner.workspace}}/build
+
+    - name: Configure CMake
+      shell: bash
+      working-directory: ${{runner.workspace}}/build
+      env:
+        CC: ${{matrix.config.compiler}}
+        CXX: ${{matrix.config.compiler}}
+      run: cmake $GITHUB_WORKSPACE ${{matrix.config.cmake_flags}} -DCMAKE_INSTALL_PREFIX=${{runner.workspace}}/install -DSFML_BUILD_EXAMPLES=TRUE -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_BUILD_TEST_SUITE=TRUE 
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: cmake --build . --target install
+  
+  android:
+    name: ${{matrix.config.name}}
+    runs-on: ubuntu-latest
