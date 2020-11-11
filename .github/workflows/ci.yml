@@ -44,19 +44,23 @@ jobs:
           }
         - {
             name: Linux GCC Static, os: ubuntu-latest,
-            compiler: gcc, cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+            compiler: gcc, cxx_compiler: g++, 
+            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
           }
         - {
             name: Linux GCC Shared, os: ubuntu-latest,
-            compiler: gcc, cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+            compiler: gcc, cxx_compiler: g++, 
+            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
           }
         - {
             name: Linux Clang Static, os: ubuntu-latest,
-            compiler: clang, cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+            compiler: clang, cxx_compiler: clang++, 
+            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
           }
         - {
             name: Linux Clang Shared, os: ubuntu-latest,
-            compiler: clang, cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+            compiler: clang, cxx_compiler: clang++, 
+            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
           }
 
     steps:
@@ -75,7 +79,7 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       env:
         CC: ${{matrix.config.compiler}}
-        CXX: ${{matrix.config.compiler}}
+        CXX: ${{matrix.config.cxx_compiler}}
       run: cmake $GITHUB_WORKSPACE ${{matrix.config.cmake_flags}} -DCMAKE_INSTALL_PREFIX=${{runner.workspace}}/install -DSFML_BUILD_EXAMPLES=TRUE -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_BUILD_TEST_SUITE=TRUE 
 
     - name: Build
