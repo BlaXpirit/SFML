@@ -4,91 +4,51 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: ${{matrix.config.name}}
-    runs-on: ${{matrix.config.os}}
+    runs-on: ${{matrix.os}}
 
     strategy:
       matrix:
-        config:
-        - {
-            name: Windows VS2017 Static, os: windows-2016,
-            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
-          }
-        - {
-            name: Windows VS2017 Shared, os: windows-2016,
-            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
-          }
-        - {
-            name: Windows VS2019 Static, os: windows-latest,
-            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
-          }
-        - {
-            name: Windows VS2019 Shared, os: windows-latest,
-            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
-          }
-        - {
-            name: MacOS XCode Shared, os: macos-latest,
-            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
-          }
-        - {
-            name: MacOS XCode Static, os: macos-latest,
-            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
-          }
-        - {
-            name: MacOS XCode Frameworks, os: macos-latest,
-            cmake_flags: -DSFML_BUILD_FRAMEWORKS=TRUE
-          }
-        - {
-            name: MacOS XCode iOS, os: macos-latest,
-            cmake_flags: -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/cmake/toolchains/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
-          }
-        - {
-            name: Linux GCC Static, os: ubuntu-latest,
-            compiler: gcc, cxx_compiler: g++, 
-            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
-          }
-        - {
-            name: Linux GCC Shared, os: ubuntu-latest,
-            compiler: gcc, cxx_compiler: g++, 
-            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
-          }
-        - {
-            name: Linux Clang Static, os: ubuntu-latest,
-            compiler: clang, cxx_compiler: clang++, 
-            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
-          }
-        - {
-            name: Linux Clang Shared, os: ubuntu-latest,
-            compiler: clang, cxx_compiler: clang++, 
-            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
-          }
+        os: [ubuntu-latest, windows-2016, windows-latest, macos-latest]
+        config: [static, shared]
+        include:
+          - os: ubuntu-latest
+            compiler: clang
+            cxx_compiler: clang++
+          - os: macos-latest
+            frameworks: true
+          - os: macos-latest
+            ios: true
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Install Linux Dependencies
-      if: ${{matrix.config.os == 'ubuntu-latest'}}
+      if: ${{runner.os == 'linux'}}
       run: sudo apt-get install libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev
 
     - name: Create Build Environment
       run: |
-        cmake -E make_directory ${{runner.workspace}}/build
+        cmake -E make_directory build
 
     - name: Configure CMake
       shell: bash
-      working-directory: ${{runner.workspace}}/build
+      working-directory: build
       env:
-        CC: ${{matrix.config.compiler}}
-        CXX: ${{matrix.config.cxx_compiler}}
-      run: cmake $GITHUB_WORKSPACE ${{matrix.config.cmake_flags}} -DCMAKE_INSTALL_PREFIX=${{runner.workspace}}/install -DSFML_BUILD_EXAMPLES=TRUE -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_BUILD_TEST_SUITE=TRUE 
+        CC: ${{matrix.compiler}}
+        CXX: ${{matrix.cxx_compiler}}
+      run: >
+        cmake $GITHUB_WORKSPACE
+        ${{matrix.ios && 'cmake_flags: -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/cmake/toolchains/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR'}}
+        ${{matrix.frameworks && '-DSFML_BUILD_FRAMEWORKS=TRUE'}}
+        -DBUILD_SHARED_LIBS=${{matrix.config == 'shared'}}
+        -DCMAKE_INSTALL_PREFIX=$(pwd)/install -DSFML_BUILD_EXAMPLES=TRUE -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_BUILD_TEST_SUITE=TRUE
 
     - name: Build
-      working-directory: ${{runner.workspace}}/build
+      working-directory: build
       shell: bash
       run: cmake --build . --target install
-  
+
   android:
-    name: ${{matrix.config.name}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
