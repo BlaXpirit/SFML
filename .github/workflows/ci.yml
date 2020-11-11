@@ -62,6 +62,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install Linux Dependencies
+      if: ${{matrix.config.os == "ubuntu-latest"}}
+      run: sudo apt-get install libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev
+
     - name: Create Build Environment
       run: |
         cmake -E make_directory ${{runner.workspace}}/build
