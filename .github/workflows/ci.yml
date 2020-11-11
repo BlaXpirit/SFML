@@ -43,20 +43,20 @@ jobs:
             cmake_flags: -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/cmake/toolchains/iOS.toolchain.cmake -DIOS_PLATFORM=SIMULATOR
           }
         - {
-            name: GCC Static, compiler: g++,
-            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+            name: Linux GCC Static, os: ubuntu-latest,
+            compiler: g++, cmake_flags: -DBUILD_SHARED_LIBS=FALSE
           }
         - {
-            name: GCC Shared, compiler: g++,
-            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+            name: Linux GCC Shared, os: ubuntu-latest,
+            compiler: g++, cmake_flags: -DBUILD_SHARED_LIBS=TRUE
           }
         - {
-            name: Clang Static, compiler: clang,
-            cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+            name: Linux Clang Static, os: ubuntu-latest,
+            compiler: clang, cmake_flags: -DBUILD_SHARED_LIBS=FALSE
           }
         - {
-            name: Clang Shared, compiler: clang,
-            cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+            name: Linux Clang Shared, os: ubuntu-latest,
+            compiler: clang, cmake_flags: -DBUILD_SHARED_LIBS=TRUE
           }
 
     steps:
