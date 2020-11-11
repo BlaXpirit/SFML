@@ -44,11 +44,11 @@ jobs:
           }
         - {
             name: Linux GCC Static, os: ubuntu-latest,
-            compiler: g++, cmake_flags: -DBUILD_SHARED_LIBS=FALSE
+            compiler: gcc, cmake_flags: -DBUILD_SHARED_LIBS=FALSE
           }
         - {
             name: Linux GCC Shared, os: ubuntu-latest,
-            compiler: g++, cmake_flags: -DBUILD_SHARED_LIBS=TRUE
+            compiler: gcc, cmake_flags: -DBUILD_SHARED_LIBS=TRUE
           }
         - {
             name: Linux Clang Static, os: ubuntu-latest,
